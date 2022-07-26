@@ -1,0 +1,60 @@
+package com.example.springsecurityjwt.controller;
+
+import com.example.springsecurityjwt.common.exeption.APIException;
+import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
+import com.example.springsecurityjwt.config.JwtTokenProvider;
+import com.example.springsecurityjwt.dto.LoginRequest;
+import com.example.springsecurityjwt.dto.LoginResponse;
+import com.example.springsecurityjwt.dto.Message;
+import com.example.springsecurityjwt.model.CustomUserDetails;
+import com.google.common.base.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/v1")
+public class Controller {
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+
+    @PostMapping("/login")
+    public ResponseEntity authenticateUser(@RequestBody LoginRequest loginRequest) throws APIException {
+        if (Strings.isNullOrEmpty(loginRequest.getUsername())) {
+            throw new ItemCanNotEmptyException("Login Empty");
+        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
+        redisTemplate.opsForValue().set("user", loginRequest);
+        return ResponseEntity.ok(new LoginResponse(jwt));
+    }
+
+    @GetMapping("/message")
+    public ResponseEntity<Message> randomStuff() {
+        System.out.println(redisTemplate.opsForValue().get("user"));
+        System.out.println(redisTemplate.opsForValue().get("a"));
+        return ResponseEntity.ok(new Message("TEST___________________________"));
+    }
+
+}
