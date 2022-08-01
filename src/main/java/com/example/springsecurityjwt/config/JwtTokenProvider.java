@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.config;
 
+import com.example.springsecurityjwt.helper.Constants;
 import com.example.springsecurityjwt.model.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class JwtTokenProvider {
 
     public long getTimeToEndOfDay() {
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = start.plusHours(12);
+        LocalDateTime end = start.plusHours(Constants.MAX_EXPIRATION_TIME);
         Duration duration = Duration.between(start, end);
         return duration.toMillis();
     }

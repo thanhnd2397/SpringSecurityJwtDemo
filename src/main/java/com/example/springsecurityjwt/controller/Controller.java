@@ -6,6 +6,7 @@ import com.example.springsecurityjwt.config.JwtTokenProvider;
 import com.example.springsecurityjwt.dto.LoginRequest;
 import com.example.springsecurityjwt.dto.LoginResponse;
 import com.example.springsecurityjwt.dto.Message;
+import com.example.springsecurityjwt.helper.MessageConst;
 import com.example.springsecurityjwt.model.CustomUserDetails;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
+
 @RestController
 @RequestMapping("/api/v1")
-public class Controller {
+public class Controller extends BaseController{
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -31,7 +34,7 @@ public class Controller {
 
 
     @PostMapping("/login")
-    public ResponseEntity authenticateUser(@RequestBody LoginRequest loginRequest) throws APIException {
+    public Object authenticateUser(@RequestBody LoginRequest loginRequest, Locale locale) throws APIException {
         if (Strings.isNullOrEmpty(loginRequest.getUsername()) || Strings.isNullOrEmpty(loginRequest.getPassword())) {
             throw new ItemCanNotEmptyException("empty");
         }
@@ -45,7 +48,8 @@ public class Controller {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
             redisTemplate.opsForValue().set("user", loginRequest);
-            return ResponseEntity.ok(new LoginResponse(jwt));
+            System.out.println(locale);
+            return ResponseEntity.ok(resFactory.ok(MessageConst.I0001, locale, new LoginResponse(jwt)));
         }catch (Exception e ){
             throw new ItemCanNotEmptyException("...........");
         }

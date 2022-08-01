@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.config.exeptions;
 
+import com.example.springsecurityjwt.common.exeption.APIException;
 import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
 import com.example.springsecurityjwt.model.response.Generic;
 import org.apache.logging.log4j.Level;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,9 +40,16 @@ public class ExceptionHandlingController {
 
     @ExceptionHandler(ItemCanNotEmptyException.class)
     @ResponseBody
-    public Generic<Object> handleItemCanNotEmptyException(HttpServletRequest req, ItemCanNotEmptyException ex,
-                                                          Locale locale) {
+    public ResponseEntity<?> handleItemCanNotEmptyException(HttpServletRequest req, ItemCanNotEmptyException ex,
+                                                            Locale locale) {
         log.log(LOG_LEVEL, MessageFormat.format(LOG_LEVEL_PATTERN, req.getRequestURL(), ex), ex.getMessage());
-        return resFactory.handleItemCanNotEmptyException(ex, locale);
+        return ResponseEntity.status(getAPIErrorCode(ex)).body(resFactory.handleItemCanNotEmptyException(ex, locale));
+    }
+
+    private int getAPIErrorCode(APIException ex) {
+        if (ex instanceof ItemCanNotEmptyException) {
+            return 401;
+        }
+        return 500;
     }
 }
