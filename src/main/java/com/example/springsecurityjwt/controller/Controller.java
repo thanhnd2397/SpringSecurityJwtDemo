@@ -17,9 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1")
 public class Controller {
@@ -35,25 +32,28 @@ public class Controller {
 
     @PostMapping("/login")
     public ResponseEntity authenticateUser(@RequestBody LoginRequest loginRequest) throws APIException {
-        if (Strings.isNullOrEmpty(loginRequest.getUsername())) {
-            throw new ItemCanNotEmptyException("Login Empty");
+        if (Strings.isNullOrEmpty(loginRequest.getUsername()) || Strings.isNullOrEmpty(loginRequest.getPassword())) {
+            throw new ItemCanNotEmptyException("empty");
         }
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-        redisTemplate.opsForValue().set("user", loginRequest);
-        return ResponseEntity.ok(new LoginResponse(jwt));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
+            redisTemplate.opsForValue().set("user", loginRequest);
+            return ResponseEntity.ok(new LoginResponse(jwt));
+        }catch (Exception e ){
+            throw new ItemCanNotEmptyException("...........");
+        }
     }
 
     @GetMapping("/message")
     public ResponseEntity<Message> randomStuff() {
         System.out.println(redisTemplate.opsForValue().get("user"));
-        System.out.println(redisTemplate.opsForValue().get("a"));
         return ResponseEntity.ok(new Message("TEST___________________________"));
     }
 

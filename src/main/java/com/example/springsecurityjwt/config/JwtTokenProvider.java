@@ -14,26 +14,23 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final String JWT_SECRET = "lodaaaaaa";
 
-        private final long JWT_EXPIRATION = 604800000L;
-
     public String generateToken(CustomUserDetails userDetails) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
         return Jwts.builder()
-                .setSubject(Long.toString(userDetails.getUser().getId()))
-                .claim("userId", userDetails.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(new Date((new Date()).getTime() + getTimeToEndOfDay()))
+                .setSubject(userDetails.getUsername())
+                .claim("userName", userDetails.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date((new Date()).getTime() + getTimeToEndOfDay()))
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
-    public Long getUserIdFromJWT(String token) {
+    public String getUserNameFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.getSubject();
     }
 
     public boolean validateToken(String authToken) {
