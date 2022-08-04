@@ -62,7 +62,7 @@ public class Controller extends BaseController{
     }
 
     @GetMapping("/message")
-    public ResponseEntity<Message> randomStuff() {
+    public Object randomStuff() {
         System.out.println(redisTemplate.opsForValue().get("mp_Key:data"));
         return ResponseEntity.ok(new Message("TEST___________________________"));
     }

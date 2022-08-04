@@ -34,14 +34,14 @@ public class ExceptionHandlingController {
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation")
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
-    public Generic<Object> conflict(HttpServletRequest req, Exception ex, Locale locale) {
+    public Object conflict(HttpServletRequest req, Exception ex, Locale locale) {
         log.error(MessageFormat.format(LOG_LEVEL_PATTERN, req.getRequestURL(), ex), ex);
         return resFactory.unknownError(ex, locale);
     }
 
     @ExceptionHandler(ItemCanNotEmptyException.class)
     @ResponseBody
-    public ResponseEntity<?> handleItemCanNotEmptyException(HttpServletRequest req, ItemCanNotEmptyException ex,
+    public Object handleItemCanNotEmptyException(HttpServletRequest req, ItemCanNotEmptyException ex,
                                                             Locale locale) {
         log.log(LOG_LEVEL, MessageFormat.format(LOG_LEVEL_PATTERN, req.getRequestURL(), ex), ex.getMessage());
         return ResponseEntity.status(getAPIErrorCode(ex)).body(resFactory.handleItemCanNotEmptyException(ex, locale));
@@ -49,7 +49,7 @@ public class ExceptionHandlingController {
 
     @ExceptionHandler(LoginException.class)
     @ResponseBody
-    public ResponseEntity<?> handleLoginException(HttpServletRequest req, LoginException ex,
+    public Object handleLoginException(HttpServletRequest req, LoginException ex,
                                                             Locale locale) {
         log.log(LOG_LEVEL, MessageFormat.format(LOG_LEVEL_PATTERN, req.getRequestURL(), ex), ex.getMessage());
         return ResponseEntity.status(getAPIErrorCode(ex)).body(resFactory.handleLoginException(ex, locale));
@@ -57,10 +57,10 @@ public class ExceptionHandlingController {
 
     private int getAPIErrorCode(APIException ex) {
         if (ex instanceof ItemCanNotEmptyException) {
-            return 401;
+            return 400;
         }
         if (ex instanceof LoginException) {
-            return 403;
+            return 401;
         }
         return 500;
     }
