@@ -2,6 +2,7 @@ package com.example.springsecurityjwt.config.exeptions;
 
 import com.example.springsecurityjwt.common.exeption.APIException;
 import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
+import com.example.springsecurityjwt.common.exeption.api.LoginException;
 import com.example.springsecurityjwt.model.response.Generic;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -46,9 +47,20 @@ public class ExceptionHandlingController {
         return ResponseEntity.status(getAPIErrorCode(ex)).body(resFactory.handleItemCanNotEmptyException(ex, locale));
     }
 
+    @ExceptionHandler(LoginException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleLoginException(HttpServletRequest req, LoginException ex,
+                                                            Locale locale) {
+        log.log(LOG_LEVEL, MessageFormat.format(LOG_LEVEL_PATTERN, req.getRequestURL(), ex), ex.getMessage());
+        return ResponseEntity.status(getAPIErrorCode(ex)).body(resFactory.handleLoginException(ex, locale));
+    }
+
     private int getAPIErrorCode(APIException ex) {
         if (ex instanceof ItemCanNotEmptyException) {
             return 401;
+        }
+        if (ex instanceof LoginException) {
+            return 403;
         }
         return 500;
     }

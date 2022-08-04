@@ -43,7 +43,7 @@ public class ResponseFactory extends AbstractResponseFactory {
      * @return the generic
      */
     public Generic<Object> fail(Locale locale, String message) {
-        return new Generic<Object>(CodeConst.ERROR, message).setOutput("");
+        return new Generic<Object>(CodeConst.ERROR, message);
     }
 
     /**

@@ -13,7 +13,7 @@ services:
 
   redis-commander:
     container_name: redis-comander
-    image: rediscommander/redis-commander:latest
+    image: ghcr.io/joeferner/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
       - HTTP_USER=root
