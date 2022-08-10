@@ -1,4 +1,4 @@
-package com.example.springsecurityjwt.model.response;
+package com.example.springsecurityjwt.model.response.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -3,7 +3,6 @@ package com.example.springsecurityjwt.config.exeptions;
 import com.example.springsecurityjwt.common.exeption.APIException;
 import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
 import com.example.springsecurityjwt.common.exeption.api.LoginException;
-import com.example.springsecurityjwt.model.response.Generic;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

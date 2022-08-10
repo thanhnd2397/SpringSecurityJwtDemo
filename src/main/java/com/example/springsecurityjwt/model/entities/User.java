@@ -1,4 +1,4 @@
-package com.example.springsecurityjwt.model;
+package com.example.springsecurityjwt.model.entities;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-@Data // lombok
+@Data
 public class User {
     @Id
     @GeneratedValue

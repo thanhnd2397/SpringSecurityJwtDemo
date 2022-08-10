@@ -1,7 +1,6 @@
 package com.example.springsecurityjwt.controller;
 
-import com.example.springsecurityjwt.model.response.ResponseFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.springsecurityjwt.model.response.common.ResponseFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public abstract class BaseController {
 
-    @Autowired
-    protected ResponseFactory resFactory;
+    protected final ResponseFactory resFactory;
 
+    public BaseController(ResponseFactory resFactory) {
+        this.resFactory = resFactory;
+    }
 }

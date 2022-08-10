@@ -1,7 +1,7 @@
 package com.example.springsecurityjwt.service;
 
-import com.example.springsecurityjwt.model.CustomUserDetails;
-import com.example.springsecurityjwt.model.User;
+import com.example.springsecurityjwt.model.security.CustomUserDetails;
+import com.example.springsecurityjwt.model.entities.User;
 import com.example.springsecurityjwt.repository.UseraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

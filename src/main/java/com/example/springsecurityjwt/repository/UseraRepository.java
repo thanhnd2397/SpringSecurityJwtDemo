@@ -1,6 +1,6 @@
 package com.example.springsecurityjwt.repository;
 
-import com.example.springsecurityjwt.model.User;
+import com.example.springsecurityjwt.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

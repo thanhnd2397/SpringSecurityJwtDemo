@@ -3,7 +3,7 @@ package com.example.springsecurityjwt.config.exeptions;
 import com.example.springsecurityjwt.common.exeption.APIException;
 import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
 import com.example.springsecurityjwt.common.exeption.api.LoginException;
-import com.example.springsecurityjwt.model.response.Generic;
+import com.example.springsecurityjwt.model.response.common.Generic;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;

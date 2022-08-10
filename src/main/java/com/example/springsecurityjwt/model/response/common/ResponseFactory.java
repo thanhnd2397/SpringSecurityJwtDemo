@@ -1,10 +1,10 @@
-package com.example.springsecurityjwt.model.response;
+package com.example.springsecurityjwt.model.response.common;
 
 import com.example.springsecurityjwt.helper.CodeConst;
-import com.example.springsecurityjwt.model.response.common.AbstractResponseFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+
 @Component
 public class ResponseFactory extends AbstractResponseFactory {
 
@@ -43,6 +43,10 @@ public class ResponseFactory extends AbstractResponseFactory {
      * @return the generic
      */
     public Generic<Object> fail(Locale locale, String message) {
+        return new Generic<Object>(CodeConst.ERROR, message);
+    }
+
+    public Generic<Object> fail(String message) {
         return new Generic<Object>(CodeConst.ERROR, message);
     }
 

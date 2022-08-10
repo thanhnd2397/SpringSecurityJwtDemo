@@ -26,8 +26,11 @@ import java.util.Map;
 @EnableConfigurationProperties
 public class RedisConfig {
 
-    @Autowired
-    private CacheConfigurationProperties cacheConfigurationProperties = null;
+    private final CacheConfigurationProperties cacheConfigurationProperties;
+
+    public RedisConfig(CacheConfigurationProperties cacheConfigurationProperties) {
+        this.cacheConfigurationProperties = cacheConfigurationProperties;
+    }
 
     private RedisCacheConfiguration createCacheConfiguration(long timeoutInSeconds) {
         return RedisCacheConfiguration.defaultCacheConfig()
@@ -49,6 +52,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(cacheConfigurationProperties.getHost());
         redisStandaloneConfiguration.setPort(Integer.parseInt(cacheConfigurationProperties.getPort()));
+        redisStandaloneConfiguration.setPassword(cacheConfigurationProperties.getPassword());
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 

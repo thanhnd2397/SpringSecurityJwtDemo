@@ -1,7 +1,7 @@
 package com.example.springsecurityjwt.config;
 
 import com.example.springsecurityjwt.helper.Constants;
-import com.example.springsecurityjwt.model.CustomUserDetails;
+import com.example.springsecurityjwt.model.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

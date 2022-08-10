@@ -2,7 +2,6 @@ package com.example.springsecurityjwt.controller;
 
 import com.example.springsecurityjwt.common.exeption.APIException;
 import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
-import com.example.springsecurityjwt.common.exeption.api.LoginException;
 import com.example.springsecurityjwt.config.JwtTokenProvider;
 import com.example.springsecurityjwt.helper.CodeConst;
 import com.example.springsecurityjwt.helper.RedisKeyHelper;
@@ -10,7 +9,8 @@ import com.example.springsecurityjwt.model.request.LoginRequest;
 import com.example.springsecurityjwt.model.response.LoginResponse;
 import com.example.springsecurityjwt.model.response.Message;
 import com.example.springsecurityjwt.helper.MessageConst;
-import com.example.springsecurityjwt.model.CustomUserDetails;
+import com.example.springsecurityjwt.model.response.common.ResponseFactory;
+import com.example.springsecurityjwt.model.security.CustomUserDetails;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,14 +26,19 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1")
 public class Controller extends BaseController{
-    @Autowired
+    final
     AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
+
+    public Controller(ResponseFactory resFactory, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, RedisTemplate redisTemplate) {
+        super(resFactory);
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+        this.redisTemplate = redisTemplate;
+    }
 
     @PostMapping("/login")
     public Object authenticateUser(@RequestBody LoginRequest loginRequest, Locale locale) throws APIException {
@@ -54,7 +59,7 @@ public class Controller extends BaseController{
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-            redisTemplate.opsForValue().set(RedisKeyHelper.buildApiKey("data"), data);
+            redisTemplate.opsForValue().set("data", data);
             return ResponseEntity.ok(resFactory.ok(MessageConst.I0001, locale, new LoginResponse(jwt)));
         }catch (Exception e){
             return ResponseEntity.status(CodeConst.UNAUTHORIZED).body(resFactory.fail(locale, "Wrong username or password"));
@@ -63,7 +68,8 @@ public class Controller extends BaseController{
 
     @GetMapping("/message")
     public Object randomStuff() {
-        System.out.println(redisTemplate.opsForValue().get("mp_Key:data"));
+        System.out.println(redisTemplate.opsForValue().get("data"));
+        redisTemplate.delete("mp_Key:data");
         return ResponseEntity.ok(new Message("TEST___________________________"));
     }
 
