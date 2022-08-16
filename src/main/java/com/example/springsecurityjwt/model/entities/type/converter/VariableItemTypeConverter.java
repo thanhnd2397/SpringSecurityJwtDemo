@@ -3,7 +3,9 @@ package com.example.springsecurityjwt.model.entities.type.converter;
 import com.example.springsecurityjwt.model.entities.type.VariableItemType;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter
 public class VariableItemTypeConverter implements AttributeConverter<VariableItemType, Integer> {
 
     @Override

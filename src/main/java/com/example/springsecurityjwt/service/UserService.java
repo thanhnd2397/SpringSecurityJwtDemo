@@ -2,32 +2,31 @@ package com.example.springsecurityjwt.service;
 
 import com.example.springsecurityjwt.model.security.CustomUserDetails;
 import com.example.springsecurityjwt.model.entities.User;
-import com.example.springsecurityjwt.repository.UseraRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.springsecurityjwt.repository.UserRepository;
+import com.example.springsecurityjwt.service.base.RestServiceImpl;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserDetailsService {
+@Primary
+public class UserService extends RestServiceImpl<User, Long> implements UserDetailsService, UserServiceI  {
 
-    @Autowired
-    private UseraRepository userRepository;
+    private final UserRepository dao;
+
+    public UserService(UserRepository dao) {
+        super(dao);
+        this.dao = dao;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        // Kiểm tra xem user có tồn tại trong database không?
-        User user = userRepository.findByUsername(username);
+        User user = dao.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new CustomUserDetails(user);
-    }
-
-    public UserDetails loadUserByUserId(Long id) {
-        // Kiểm tra xem user có tồn tại trong database không?
-        User user = userRepository.findById(id).get();
         return new CustomUserDetails(user);
     }
 }

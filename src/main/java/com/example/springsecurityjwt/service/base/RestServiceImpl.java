@@ -1,5 +1,7 @@
 package com.example.springsecurityjwt.service.base;
 
+import com.example.springsecurityjwt.repository.UserRepository;
+import com.example.springsecurityjwt.repository.base.RestDao;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,39 +14,101 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class RestServiceImpl<T, ID extends Serializable> implements RestService<T, ID> {
-    @Override
-    public List<T> findAll() {
-        return null;
+
+    protected RestDao<T, ID> restDao;
+
+    public RestServiceImpl(RestDao<T, ID> restDao) {
+        this.restDao = restDao;
     }
 
     @Override
-    public List<T> findAll(Sort sort) {
-        return null;
+    public boolean existsById(ID id) {
+        return restDao.existsById(id);
     }
 
     @Override
-    public Page<T> findAll(Pageable pageable) {
-        return null;
+    public <S extends T> boolean exists(Example<S> example) {
+        return restDao.exists(example);
     }
 
     @Override
-    public List<T> findAllById(Iterable<ID> ids) {
+    public <S extends T, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
     public long count() {
-        return 0;
+        return restDao.count();
     }
 
     @Override
-    public void deleteById(ID id) {
+    public <S extends T> long count(Example<S> example) {
+        return restDao.count(example);
+    }
 
+    @Override
+    public List<T> findAll() {
+        return restDao.findAll();
+    }
+
+    @Override
+    public List<T> findAll(@SuppressWarnings("exports") Sort sort) {
+        return restDao.findAll(sort);
+    }
+
+    @Override
+    public <S extends T> List<S> findAll(Example<S> example) {
+        return restDao.findAll(example);
+    }
+
+    @Override
+    public Page<T> findAll(@SuppressWarnings("exports") Pageable pageable) {
+        return restDao.findAll(pageable);
+    }
+
+    @Override
+    public <S extends T> Page<S> findAll(Example<S> example, @SuppressWarnings("exports") Pageable pageable) {
+        return restDao.findAll(example, pageable);
+    }
+
+    @Override
+    public <S extends T> List<S> findAll(Example<S> example, @SuppressWarnings("exports") Sort sort) {
+        return restDao.findAll(example, sort);
+    }
+
+    @Override
+    public List<T> findAllById(Iterable<ID> ids) {
+        return restDao.findAllById(ids);
+    }
+
+    @Override
+    public Optional<T> findById(ID id) {
+        return restDao.findById(id);
+    }
+
+    @Override
+    public <S extends T> Optional<S> findOne(Example<S> example) {
+        return restDao.findOne(example);
+    }
+
+    @Override
+    public T getOne(ID id) {
+        return restDao.getOne(id);
+    }
+
+    @Override
+    public T getById(ID id) {
+        return null;
+    }
+
+    @Override
+    public T getReferenceById(ID id) {
+        return null;
     }
 
     @Override
     public void delete(T entity) {
-
+        restDao.delete(entity);
     }
 
     @Override
@@ -53,48 +117,13 @@ public class RestServiceImpl<T, ID extends Serializable> implements RestService<
     }
 
     @Override
-    public void deleteAll(Iterable<? extends T> entities) {
-
+    public void deleteById(ID id) {
+        restDao.deleteById(id);
     }
 
     @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
-    public <S extends T> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends T> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<T> findById(ID id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(ID id) {
-        return false;
-    }
-
-    @Override
-    public void flush() {
-
-    }
-
-    @Override
-    public <S extends T> S saveAndFlush(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends T> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return null;
+    public void deleteInBatch(Iterable<T> entities) {
+        restDao.deleteInBatch(entities);
     }
 
     @Override
@@ -109,56 +138,42 @@ public class RestServiceImpl<T, ID extends Serializable> implements RestService<
 
     @Override
     public void deleteAllInBatch() {
-
+        restDao.deleteAllInBatch();
     }
 
     @Override
-    public T getOne(ID id) {
-        return null;
+    public void deleteAll(Iterable<? extends T> entities) {
+        restDao.deleteAll(entities);
     }
 
     @Override
-    public T getById(ID id) {
-        return null;
+    public void deleteAll() {
+        restDao.deleteAll();
     }
 
     @Override
-    public T getReferenceById(ID id) {
-        return null;
+    public <S extends T> S save(S entity) {
+        return restDao.save(entity);
     }
 
     @Override
-    public <S extends T> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
+    public <S extends T> List<S> saveAll(Iterable<S> entities) {
+        return restDao.saveAll(entities);
     }
 
     @Override
-    public <S extends T> List<S> findAll(Example<S> example) {
-        return null;
+    public void flush() {
+        restDao.flush();
     }
 
     @Override
-    public <S extends T> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
+    public <S extends T> S saveAndFlush(S entity) {
+        return restDao.saveAndFlush(entity);
     }
 
     @Override
-    public <S extends T> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public <S extends T> long count(Example<S> example) {
-        return 0;
-    }
-
-    @Override
-    public <S extends T> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
-    public <S extends T, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends T> List<S> saveAllAndFlush(Iterable<S> entities) {
         return null;
     }
 }
+

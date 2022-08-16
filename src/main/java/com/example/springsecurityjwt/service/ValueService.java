@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
-public interface ValueService extends RestService<Value, Integer> {
+public interface ValueService extends RestService<Value, Long> {
     String uploadFile(MultipartFile mFile, String fileName) throws IOException;
 
     File convertToFile(MultipartFile multipartFile, String fileName);

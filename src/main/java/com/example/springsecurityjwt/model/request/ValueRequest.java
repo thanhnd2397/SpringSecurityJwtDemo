@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class ValueRequest {
     private String text;
     private MultipartFile image;
-    private Integer itemId;
+    private Long itemId;
 }

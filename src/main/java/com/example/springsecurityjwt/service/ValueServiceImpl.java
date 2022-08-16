@@ -1,6 +1,7 @@
 package com.example.springsecurityjwt.service;
 
 import com.example.springsecurityjwt.model.entities.Value;
+import com.example.springsecurityjwt.repository.ValueRepository;
 import com.example.springsecurityjwt.service.base.RestServiceImpl;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -19,9 +20,14 @@ import java.nio.file.Files;
 
 @Primary
 @Service
-public class ValueServiceImpl extends RestServiceImpl<Value, Integer> implements ValueService{
+public class ValueServiceImpl extends RestServiceImpl<Value, Long> implements ValueService{
 
-    private final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/thanh-8f7b4.appspot.com/o/<bucket name>?alt=media&token=49543421-cd2c-4e21-9519-485b337180e1";
+    private final ValueRepository dao;
+
+    public ValueServiceImpl(ValueRepository dao) {
+        super(dao);
+        this.dao = dao;
+    }
 
     @Override
     public String uploadFile(MultipartFile mFile, String fileName) throws IOException {
@@ -31,6 +37,7 @@ public class ValueServiceImpl extends RestServiceImpl<Value, Integer> implements
         Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("firebasekey.json"));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/thanh-8f7b4.appspot.com/o/<bucket name>?alt=media&token=49543421-cd2c-4e21-9519-485b337180e1";
         return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 

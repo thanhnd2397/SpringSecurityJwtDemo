@@ -1,12 +1,17 @@
 package com.example.springsecurityjwt.model.response.common;
 
 import com.example.springsecurityjwt.helper.CodeConst;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Component
 public class ResponseFactory extends AbstractResponseFactory {
+
+    public ResponseFactory(MessageSource ms) {
+        super(ms);
+    }
 
     /**
      * Ok.

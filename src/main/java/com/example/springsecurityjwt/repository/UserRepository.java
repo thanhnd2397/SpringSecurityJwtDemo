@@ -1,10 +1,11 @@
 package com.example.springsecurityjwt.repository;
 
 import com.example.springsecurityjwt.model.entities.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.springsecurityjwt.repository.base.RestDao;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UseraRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends RestDao<User, Long> {
     User findByUsername(String username);
+
 }

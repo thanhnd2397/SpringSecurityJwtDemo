@@ -5,12 +5,11 @@ import java.util.stream.Stream;
 public enum VariableItemType {
     TEXT(1), IMAGE(2);
 
-    private Integer value;
+    private final Integer value;
 
     /**
-     * @param value
      */
-    private VariableItemType(Integer value) {
+    VariableItemType(Integer value) {
         this.value = value;
     }
 
