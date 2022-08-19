@@ -13,12 +13,13 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private final String JWT_SECRET = "lodaaaaaa";
+    private final String JWT_SECRET = "i9weqwei39qojkln4239arj2389klj234";
 
     public String generateToken(CustomUserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("userName", userDetails.getUsername())
+                .claim("id", userDetails.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(
                         new Date((new Date()).getTime() + getTimeToEndOfDay()))
@@ -27,11 +28,15 @@ public class JwtTokenProvider {
     }
 
     public String getUserNameFromJWT(String token) {
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
+                .getBody().getSubject();
+    }
+
+    public String getUserIdFromJWT(String token) {
+        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().get("id")
+                .toString();
     }
 
     public boolean validateToken(String authToken) {
