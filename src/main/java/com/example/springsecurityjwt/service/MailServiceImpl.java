@@ -46,8 +46,8 @@ public class MailServiceImpl implements MailService{
             try {
                 message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(s)});
                 message.setFrom(new InternetAddress(email));
-                message.setSubject("Sgintk Test____  ");
-                message.setContent(thymeleafService.getContent(), CONTENT_TYPE_TEXT_HTML);
+                message.setSubject("***");
+                message.setContent(thymeleafService.demoMail(), CONTENT_TYPE_TEXT_HTML);
                 Transport.send(message);
             } catch (MessagingException e) {
                 e.printStackTrace();

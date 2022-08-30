@@ -48,7 +48,7 @@ public class ThymeleafServiceImpl implements ThymeleafService{
     }
 
     @Override
-    public String getContent() {
+    public String demoMail() {
         final Context context = new Context();
         return templateEngine.process(TEMPLATE_NAME, context);
     }
