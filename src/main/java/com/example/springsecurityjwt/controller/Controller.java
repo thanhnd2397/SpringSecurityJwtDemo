@@ -12,6 +12,7 @@ import com.example.springsecurityjwt.model.response.Message;
 import com.example.springsecurityjwt.helper.MessageConst;
 import com.example.springsecurityjwt.model.response.common.ResponseFactory;
 import com.example.springsecurityjwt.model.security.CustomUserDetails;
+import com.example.springsecurityjwt.service.MailService;
 import com.example.springsecurityjwt.service.PdfService;
 import com.example.springsecurityjwt.service.UserServiceI;
 import com.google.common.base.Strings;
@@ -44,13 +45,16 @@ public class Controller extends BaseController{
 
     private final PdfService pdfService;
 
+    private final MailService mailService;
+
     private final UserServiceI uService;
-    public Controller(ResponseFactory resFactory, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PdfService pdfService, UserServiceI uService) {
+    public Controller(ResponseFactory resFactory, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PdfService pdfService, UserServiceI uService, MailService mailService) {
         super(resFactory);
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.pdfService = pdfService;
         this.uService = uService;
+        this.mailService = mailService;
     }
 
     @PostMapping("/login")
@@ -113,6 +117,11 @@ public class Controller extends BaseController{
         response.setHeader("Content-Disposition", "attachment; filename=" + "example.pdf");
         response.getOutputStream().write(zipBytes);
         return ResponseEntity.ok(resFactory.ok("ok"));
+    }
+
+    @PostMapping("send-mail")
+    public void sendMail(@RequestBody Map<String, String> mail) {
+        mailService.sendMail(mail.get("email"));
     }
 
 }
