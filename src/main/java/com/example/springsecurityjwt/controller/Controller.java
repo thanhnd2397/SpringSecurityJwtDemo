@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -48,6 +47,7 @@ public class Controller extends BaseController{
     private final MailService mailService;
 
     private final UserServiceI uService;
+
     public Controller(ResponseFactory resFactory, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PdfService pdfService, UserServiceI uService, MailService mailService) {
         super(resFactory);
         this.authenticationManager = authenticationManager;
@@ -80,19 +80,6 @@ public class Controller extends BaseController{
         }catch (Exception e){
             return ResponseEntity.status(CodeConst.UNAUTHORIZED).body(resFactory.fail(locale, "Wrong username or password"));
         }
-    }
-    @PostMapping("/message")
-    public Object randomStuff() {
-//        System.out.println(redisTemplate.opsForValue().get("data"));
-
-//        List<LoginRequest> data;
-//        LoginRequest u1 = new LoginRequest("a1111","a22222");
-//        LoginRequest u2 = new LoginRequest("a1111","a22222");
-//        data = Arrays.asList(u1, u2);
-
-//      List a =  data.stream().filter(item -> item.getUsername().startsWith("a")).map(e -> new Message(e.getUsername())).collect(Collectors.toList());
-//        redisTemplate.delete("mp_Key:data");
-        return ResponseEntity.ok(new Message("TEST___________________________"));
     }
 
     @PostMapping("/user")

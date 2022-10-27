@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.service;
 
+import com.example.springsecurityjwt.common.exeption.api.ItemCanNotEmptyException;
 import com.example.springsecurityjwt.model.security.CustomUserDetails;
 import com.example.springsecurityjwt.model.entities.User;
 import com.example.springsecurityjwt.repository.UserRepository;
